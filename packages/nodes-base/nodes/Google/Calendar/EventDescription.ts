@@ -359,7 +359,7 @@ export const eventFields = [
 			},
 			{
 				displayName: 'Timezone',
-				name: 'timezone',
+				name: 'timeZone',
 				type: 'options',
 				typeOptions: {
 					loadOptionsMethod: 'getTimezones',

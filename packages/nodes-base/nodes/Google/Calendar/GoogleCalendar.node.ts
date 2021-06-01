@@ -199,7 +199,7 @@ export class GoogleCalendar implements INodeType {
 									id: calendarId,
 								},
 							],
-							timeZone: options.timezone || timezone,
+							timeZone: options.timeZone || timezone,
 						};
 
 						responseData = await googleApiRequest.call(
@@ -247,16 +247,17 @@ export class GoogleCalendar implements INodeType {
 						if (additionalFields.sendUpdates) {
 							qs.sendUpdates = additionalFields.sendUpdates as string;
 						}
-						const body: IEvent = {
-							start: {
+						const body: IEvent = {}
+						if (!additionalFields.allday) {
+							body.start = {
 								dateTime: start,
 								timeZone: additionalFields.timeZone || this.getTimezone(),
-							},
-							end: {
+							};
+							body.end = {
 								dateTime: end,
 								timeZone: additionalFields.timeZone || this.getTimezone(),
-							},
-						};
+							};
+						}
 						if (additionalFields.attendees) {
 							body.attendees = [];
 							(additionalFields.attendees as string[]).forEach(attendee => {
@@ -308,13 +309,15 @@ export class GoogleCalendar implements INodeType {
 						if (additionalFields.allday) {
 							body.start = {
 								date: moment(start)
-									.utc()
+									// .utc()
 									.format('YYYY-MM-DD'),
+								timeZone: additionalFields.timeZone || this.getTimezone(),
 							};
 							body.end = {
 								date: moment(end)
-									.utc()
+									// .utc()
 									.format('YYYY-MM-DD'),
+								timeZone: additionalFields.timeZone || this.getTimezone(),
 							};
 						}
 						//exampel: RRULE:FREQ=WEEKLY;INTERVAL=2;COUNT=10;UNTIL=20110701T170000Z
@@ -493,15 +496,31 @@ export class GoogleCalendar implements INodeType {
 							qs.sendUpdates = updateFields.sendUpdates as string;
 						}
 						const body: IEvent = {};
-						if (updateFields.start) {
+						if (!updateFields.allday) {
+							if (updateFields.start) {
+								body.start = {
+									dateTime: updateFields.start,
+									timeZone: updateFields.timezone || this.getTimezone(),
+								};
+							}
+							if (updateFields.end) {
+								body.end = {
+									dateTime: updateFields.end,
+									timeZone: updateFields.timezone || this.getTimezone(),
+								};
+							}
+						}
+						if (updateFields.allday && updateFields.start && updateFields.end) {
 							body.start = {
-								dateTime: updateFields.start,
+								date: moment(updateFields.start as string)
+									// .utc()
+									.format('YYYY-MM-DD'),
 								timeZone: updateFields.timeZone || this.getTimezone(),
 							};
-						}
-						if (updateFields.end) {
 							body.end = {
-								dateTime: updateFields.end,
+								date: moment(updateFields.end as string)
+									// .utc()
+									.format('YYYY-MM-DD'),
 								timeZone: updateFields.timeZone || this.getTimezone(),
 							};
 						}
@@ -552,18 +571,6 @@ export class GoogleCalendar implements INodeType {
 							if (reminders) {
 								body.reminders.overrides = reminders;
 							}
-						}
-						if (updateFields.allday && updateFields.start && updateFields.end) {
-							body.start = {
-								date: moment(updateFields.start as string)
-									.utc()
-									.format('YYYY-MM-DD'),
-							};
-							body.end = {
-								date: moment(updateFields.end as string)
-									.utc()
-									.format('YYYY-MM-DD'),
-							};
 						}
 						//exampel: RRULE:FREQ=WEEKLY;INTERVAL=2;COUNT=10;UNTIL=20110701T170000Z
 						//https://icalendar.org/iCalendar-RFC-5545/3-8-5-3-recurrence-rule.html

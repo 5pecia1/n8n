@@ -126,7 +126,7 @@ export const calendarFields = [
 			},
 			{
 				displayName: 'Timezone',
-				name: 'timezone',
+				name: 'timeZone',
 				type: 'options',
 				typeOptions: {
 					loadOptionsMethod: 'getTimezones',
