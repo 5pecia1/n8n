@@ -57,7 +57,6 @@ export async function notionApiRequestAllItems(this: IExecuteFunctions | ILoadOp
 	do {
 		responseData = await notionApiRequest.call(this, method, endpoint, body, query);
 		const { next_cursor } = responseData;
-		query['start_cursor'] = next_cursor;
 		body['start_cursor'] = next_cursor;
 		returnData.push.apply(returnData, responseData[propertyName]);
 		if (query.limit && query.limit <= returnData.length) {
