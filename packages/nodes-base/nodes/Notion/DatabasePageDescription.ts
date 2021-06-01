@@ -340,6 +340,38 @@ export const databasePageFields = [
 						description: 'Weather or not you want to define a date range.',
 					},
 					{
+						displayName: 'All Day',
+						name: 'allday',
+						displayOptions: {
+							show: {
+								type: [
+									'date',
+								],
+							},
+						},
+						type: 'boolean',
+						default: false,
+						description: 'Weather or not you want to define a date all day.',
+					},
+					{
+						displayName: 'Timezone',
+						name: 'timezone',
+						displayOptions: {
+							show: {
+								type: [
+									'date',
+								],
+							},
+						},
+						// type: 'options',
+						// typeOptions: {
+						// 	loadOptionsMethod: 'getTimezones',
+						// },
+						type: 'string',
+						default: 'UTC',
+						description: 'Time zone used in the response. By default n8n timezone is used.',
+					},
+					{
 						displayName: 'Date',
 						name: 'date',
 						displayOptions: {
@@ -684,6 +716,38 @@ export const databasePageFields = [
 						type: 'boolean',
 						default: false,
 						description: 'Weather or not you want to define a date range.',
+					},
+					{
+						displayName: 'All Day',
+						name: 'allday',
+						displayOptions: {
+							show: {
+								type: [
+									'date',
+								],
+							},
+						},
+						type: 'boolean',
+						default: false,
+						description: 'Weather or not you want to define a date all day.',
+					},
+					{
+						displayName: 'Timezone',
+						name: 'timezone',
+						displayOptions: {
+							show: {
+								type: [
+									'date',
+								],
+							},
+						},
+						// type: 'options',
+						// typeOptions: {
+						// 	loadOptionsMethod: 'getTimezones',
+						// },
+						type: 'string',
+						default: 'UTC',
+						description: 'Time zone used in the response. By default n8n timezone is used.',
 					},
 					{
 						displayName: 'Date',

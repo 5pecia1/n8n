@@ -271,14 +271,33 @@ function getPropertyKeyValue(value: any, type: string, timezone: string) {
 			break;
 		case 'date':
 			//&& value.dateStart !== 'Invalid date' && value.dateEnd !== 'Invalid date'
+
 			if (value.range === true) {
+				let start = moment.tz(value.dateStart, value.timezone).format();
+				let end = moment.tz(value.dateEnd, value.timezone).format();
+				if (value.allday) {
+					start = start.substring(0, start.indexOf("T"));
+					end = end.substring(0, end.indexOf("T"));
+				}
 				result = {
-					type: 'date', date: { start: moment.tz(value.dateStart, timezone).utc().format(), end: moment.tz(value.dateEnd, timezone).utc().format() },
+					type: 'date',
+					date: {
+						start: start,
+						end: end,
+					},
 				};
 				//if (value.date !== 'Invalid date')
 			} else {
+				let start = moment.tz(value.date, value.timezone).format();
+				if (value.allday) {
+					start = start.substring(0, start.indexOf("T"));
+				}
 				result = {
-					type: 'date', date: { start: moment.tz(value.date, timezone).utc().format(), end: null },
+					type: 'date',
+					date: {
+						start: start,
+						end: null
+					},
 				};
 			}
 			break;
